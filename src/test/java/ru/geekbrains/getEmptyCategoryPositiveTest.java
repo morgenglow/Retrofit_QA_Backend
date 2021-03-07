@@ -30,7 +30,6 @@ public class getEmptyCategoryPositiveTest {
                 .execute();
         assertThat(response.code()).isEqualTo(200);
         assertThat(response.body().getId()).isEqualTo(CategoryType.ELECTRONICS.getId());
-        //500-я ошибка, должна быть 400
     }
 
 }

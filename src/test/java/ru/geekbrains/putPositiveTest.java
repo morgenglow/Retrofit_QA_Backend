@@ -11,7 +11,9 @@ import ru.geekbrains.base.enums.CategoryType;
 import ru.geekbrains.commonRequests.CreateProduct;
 import ru.geekbrains.commonRequests.DeleteReq;
 import ru.geekbrains.dto.Product;
+import ru.geekbrains.java4.lesson6.db.dao.ProductsMapper;
 import ru.geekbrains.service.ProductService;
+import ru.geekbrains.util.DbUtils;
 import ru.geekbrains.util.RetrofitUtils;
 
 import java.io.IOException;
@@ -22,21 +24,25 @@ public class putPositiveTest {
     Integer productId;
     static ProductService productService;
     Product productChange;
+    static ProductsMapper productsMapper;
+    Product product;
 
     @SneakyThrows
     @BeforeAll
     static void beforeAll() {
+        productsMapper = DbUtils.getProductsMapper();
         productService = RetrofitUtils.getRetrofit()
                 .create(ProductService.class);
     }
 
     @BeforeEach
     void setUp() throws IOException {
-        productId = CreateProduct.createProduct();
+        product = CreateProduct.createProduct();
+        productId = product.getId();
         Faker faker = new Faker();
         productChange = new Product()
                 .withCategoryTitle(CategoryType.FOOD.getTitle())
-                .withPrice((int) (Math.random() * 1000 + 1))
+                .withPrice((int) (Math.random() * 1000))
                 .withTitle(faker.food().ingredient());
     }
 
@@ -51,7 +57,7 @@ public class putPositiveTest {
     }
 
     @AfterEach
-    void delete() throws IOException{
-        DeleteReq.tearDown(productId);
+    void delete(){
+        DbUtils.getProductsMapper().deleteByPrimaryKey(Long.valueOf(productId));
     }
 }

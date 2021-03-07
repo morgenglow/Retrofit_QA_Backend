@@ -34,7 +34,7 @@ public class deleteNegativeTest {
             retrofit2.Response<ResponseBody> response =
                     productService.deleteProduct(productId)
                             .execute();
-            assertThat(response.isSuccessful()).isTrue();
+            assertThat(response.code()).isEqualTo(500);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -30,7 +30,7 @@ public class getProductsPositiveTest {
                 .execute();
         assertThat(response.code()).isEqualTo(200);
 
-        //размер массива продуктов превышен?
+        //размер массива продуктов превышен? ответ =500
     }
 
 }

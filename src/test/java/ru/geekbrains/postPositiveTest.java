@@ -9,7 +9,9 @@ import org.junit.jupiter.api.Test;
 import ru.geekbrains.base.enums.CategoryType;
 import ru.geekbrains.commonRequests.DeleteReq;
 import ru.geekbrains.dto.Product;
+import ru.geekbrains.java4.lesson6.db.dao.ProductsMapper;
 import ru.geekbrains.service.ProductService;
+import ru.geekbrains.util.DbUtils;
 import ru.geekbrains.util.RetrofitUtils;
 
 import java.io.IOException;
@@ -20,11 +22,13 @@ public class postPositiveTest {
     Integer productId;
     Faker faker = new Faker();
     static ProductService productService;
+    static ProductsMapper productsMapper;
     Product product;
 
     @SneakyThrows
     @BeforeAll
     static void beforeAll() {
+        productsMapper = DbUtils.getProductsMapper();
         productService = RetrofitUtils.getRetrofit()
                 .create(ProductService.class);
     }
@@ -45,11 +49,11 @@ public class postPositiveTest {
                         .execute();
         productId = response.body().getId();
         assertThat(response.isSuccessful()).isTrue();
-        assertThat(response.body().getTitle()).isEqualTo(product.getTitle());
+        assertThat(productsMapper.selectByPrimaryKey(Long.valueOf(productId)).getTitle()).isEqualTo(product.getTitle());
     }
 
     @AfterEach
-    void delete() throws IOException{
-        DeleteReq.tearDown(productId);
+    void delete(){
+            DbUtils.getProductsMapper().deleteByPrimaryKey(Long.valueOf(productId));
     }
 }

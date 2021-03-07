@@ -10,7 +10,7 @@ import java.io.IOException;
 public class CreateProduct {
     static ProductService productService;
     static Integer productId;
-    public static Integer createProduct() throws IOException {
+    public static Product createProduct() throws IOException {
         productService = RetrofitUtils.getRetrofit()
                 .create(ProductService.class);
         Faker faker = new Faker();
@@ -22,6 +22,6 @@ public class CreateProduct {
         retrofit2.Response<Product> response =
                 productService.createProduct(product)
                         .execute();
-        return productId = response.body().getId();
+        return response.body();
     }
 }
